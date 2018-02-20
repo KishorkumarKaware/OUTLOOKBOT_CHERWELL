@@ -1,0 +1,170 @@
+<html>
+<head>
+    <style type="text/css">
+        body{
+            background-color: aliceblue;
+            
+        }
+        label{
+            color:red;
+        }
+        #form{
+            align-self: center;
+           
+        }
+     #invalide {
+             color: red;
+             display:none;
+        }
+        #valide{
+            color:green;
+            display:none;
+        }
+        
+    </style>
+    
+     <script type="text/javascript">
+       function myFunction()
+        {
+            var app=document.getElementById("intentlist").value;
+           document.getElementById("intentlist").value = "-"+" "+document.getElementById("intents").value+"\n"+app;
+        }
+        function templateFunction()
+         {
+              /*document.getElementById("intentlist").value =document.getElementById("Templatetype").value;*/
+              if(document.getElementById("Templatetype").value=="Text")
+
+                  {     
+                      document.getElementById("templateinput").innerHTML = " text: <input type='text' value='' id='textid' /><br />";
+                      
+                     
+                  }
+              else if(document.getElementById("Templatetype").value=="Image")
+
+                  {     
+                       document.getElementById("templateinput").innerHTML = "    text: <input type='text' value='' id='imagetextid'/><br />";
+                       document.getElementById("templateinput").innerHTML += " url/path: <input type='text' value='' id='urlid'/><br />";
+                     
+                  }
+             else if(document.getElementById("Templatetype").value=="Button")
+
+                  {
+                      document.getElementById("templateinput").innerHTML = " text: <input type='text' value='' id='buttontextid' /><br />";
+                       document.getElementById("templateinput").innerHTML  += "  title:  <input type='text' value='' id='titleid' /><br />";
+                       document.getElementById("templateinput").innerHTML += "payload: <input type='text' value='' id='payloadid' /><br />";
+                     
+                  }
+                    
+                    
+                  
+         }
+         
+         function addTemplateList()
+         {  
+              if (document.getElementById("Templatetype").value=="Text")
+                 {
+                   
+                  var t= document.getElementById("templatelistid").value;
+                  var temp = /*"templates"+":"+"\n"+" "+" "+*/ t+document.getElementById("templates").value+":" + "\n" +" "+" "+"-"+" "+"text"+": \""+ document.getElementById("textid").value+"\""; 
+              //  document.getElementById("templatelistid").append("");
+                  document.getElementById("templatelistid").value= temp+"\n";
+                     
+                     
+                  var action=document.getElementById("actionid").value;
+                     
+                   document.getElementById("actionid").value =
+                       "-"+" "+document.getElementById("templates").value+"\n"+action;
+                     
+                 }
+             
+              else if(document.getElementById("Templatetype").value=="Image")
+                 {
+                 var t= document.getElementById("templatelistid").value;
+                  var temp =t+"\n"+ document.getElementById("templates").value+":" + "\n" +"-"+" "+"text"+": \""+ document.getElementById("imagetextid").value+"\"" + "\n" +" "+" "+"image"+": "+" \""+document.getElementById("urlid").value+"\""; 
+                     
+                  document.getElementById("templatelistid").value= temp+"\n";
+                     
+                  var action=document.getElementById("actionid").value;
+                document.getElementById("actionid").value=
+                    "-"+" "+document.getElementById("templates").value+"\n"+action; 
+                 }
+             
+             else if(document.getElementById("Templatetype").value=="Button")
+                 {
+                 var t= document.getElementById("templatelistid").value;
+                  var temp =t+"\n"+ document.getElementById("templates").value+":\n- text: \""+document.getElementById("buttontextid").value +"\""+ "\n" +" "+" "+"buttons"+":"+"\n"+" "+" "+"-"+" "+"title"+":"+" \" "+document.getElementById("titleid").value +"\"" + "\n"
+                  +" "+" "+" "+" "+"payload"+":"+" \""+ document.getElementById("payloadid").value+"\""; 
+                     
+                  document.getElementById("templatelistid").value= temp+"\n";
+                     
+                  var action=document.getElementById("actionid").value;
+                document.getElementById("actionid").value=
+                    "-"+" "+document.getElementById("templates").value+"\n"+action; 
+                 }
+             
+          
+         }
+         
+          function WriteToFile()          
+        {                 
+            var fso  = new ActiveXObject("Scripting.FileSystemObject"); 
+            var fh = fso.CreateTextFile("c:\\Test1.yml", true); 
+            var fileText="Intent:\n "+document.getElementById("intentlist").value+"template:\n  "+document.getElementById("templatelistid").value+"action:\n    "+document.getElementById("actionid").value;
+            fh.WriteLine(fileText); 
+            fh.Close();        
+        }  
+       
+        
+    </script>
+    </head> 
+    <body onload="WriteToFile()">
+       
+        <form id="form" method="get" >
+          <table id="table">
+             <tr>
+                 <td><center> <span><label title="Intents" >INTENTS</label></span></center></td>
+            </tr>
+            <tr>
+                  <td><span><label title="IntentsName" >Enter Intents Name:</label> <input type="text" id="intents" /></span></td> 
+                  <td><input type="button" value="Add Intents" onclick="myFunction()"/></td>
+                 
+            
+                  <td><span><center><label title="IntentsList" >Intents List:</label></center><textarea rows="4" cols="30" id="intentlist"></textarea></span></td>   
+            </tr> 
+              <tr><td></td><td></td></tr>
+            <tr>
+                <td><center><span><label title="templates">TEMPLATES</label></span></center></td></tr>
+            <tr>
+                
+                    <td>
+                        <label itle="TemplateName">TemplateName:</label>
+                        <input type="text" id="templates"/>                   
+                    </td> 
+                    <td>
+                        <span><label title="templatesTypetitle">Template Type:</label></span>
+                        <select id = "Templatetype" onchange="templateFunction()">
+                            <option value = "Text">Text</option>
+                            <option value = "Image">Image</option>
+                            <option value = "Button">Button</option>
+                        </select>               
+                    </td>
+                    
+                    <td id="templateinput"><span><input type="text" id="textid"/></span></td>
+                    
+                    <td><input type="button" value="Add Template" onclick="addTemplateList()"/></td>
+                
+              </tr>
+              <tr> <td><label title="TemplateList" >Template List:</label></td></tr>
+              <tr><td><textarea rows="4" cols="40" id="templatelistid"  name="templatelistid"></textarea></td></tr>
+              <tr><td></td><td></td></tr>
+              <tr>
+                  <td><center><span><label title="Intents" >ACTIONS</label></span></center></td>
+            </tr>
+            <tr>            
+                <td><textarea rows="4" cols="30" id="actionid"></textarea></td>   
+            </tr>
+              <tr><center><td><input type="button" value="Create .yml File" onclick="WriteToFile()    "></td></center></tr>
+            </table>
+        </form>            
+    </body>
+</html>
